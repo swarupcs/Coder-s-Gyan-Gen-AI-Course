@@ -11,14 +11,26 @@ const groq = new Groq({
 
 async function main() {
   const completion = await groq.chat.completions.create({
+    temperature: 1,
+    // top_p: 0.2,
+    // stop: "ga", // Negative
+    // max_completion_tokens: 1000,
+    // max_tokens: '',
+
     model: 'llama-3.3-70b-versatile',
     messages: [
       {
         role: 'system',
-        content:
-          'You are Jarvis, a smart review grader. Your task is to analyse given review and return the sentiment. Classify the review as positive, neutral or negative. Output must be a single word',
+        // content:
+        //   'You are Jarvis, a smart review grader. Your task is to analyse given review and return the sentiment. Classify the review as positive, neutral or negative. Output must be a single word',
+
+        content: `You are Jarvis, a smart review grader. Your task is to analyse given review and return the sentiment. Classify the review as positive, neutral or negative. You must return the result in valid JSON structure.
+          example : {"sentiment": "Negative"}`,
       },
-      { role: 'user', content: `Review: These headphones arrived quickly and look great, but the left earcup stopped working after a week. Sentiment:` },
+      {
+        role: 'user',
+        content: `Review: These headphones arrived quickly and look great, but the left earcup stopped working after a week. Sentiment:`,
+      },
     ],
   });
 
