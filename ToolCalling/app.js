@@ -38,7 +38,7 @@ async function main() {
             properties: {
               query: {
                 type: 'string',
-                description: 'The search query to perform search om',
+                description: 'The search query to perform search on',
               },
             },
             required: ['query'],
@@ -49,9 +49,9 @@ async function main() {
     tool_choice: 'auto',
   });
 
-  const toolCalls = completion.choices[0].tool_calls;
+  const toolCalls = completion.choices[0].message.tool_calls;
 
-  console.log("toolCalls", toolCalls);
+  // console.log("toolCalls", toolCalls);
 
   if(!toolCalls) {
     console.log(`Assistant: ${completion.choices[0].message.content}`);
