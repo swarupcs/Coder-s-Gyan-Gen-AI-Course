@@ -28,6 +28,7 @@ async function main() {
     },
   ];
 
+  while(true) {
   while (true) {
     const completion = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
@@ -84,38 +85,16 @@ async function main() {
         });
       }
 
-      const completions2 = await groq.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        temperature: 0,
-        messages: messages,
-        tools: [
-          {
-            type: 'function',
-            function: {
-              name: 'webSearch',
-              description:
-                'Search the latest information and realtime data on the internet',
-              parameters: {
-                type: 'object',
-                properties: {
-                  query: {
-                    type: 'string',
-                    description: 'The search query to perform search on',
-                  },
-                },
-                required: ['query'],
-              },
-            },
-          },
-        ],
-        tool_choice: 'auto',
-      });
+
 
       // console.log(JSON.stringify(completions2.choices[0].message, null, 2));
     }
 
     // console.log(JSON.stringify(completion.choices[0].message.content));
   }
+  }
+
+
 }
 
 main();
