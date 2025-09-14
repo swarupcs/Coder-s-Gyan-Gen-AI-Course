@@ -32,23 +32,25 @@ export const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
 });
 
 export async function indexTheDocument(filePath) {
-    const loader = new PDFLoader(filePath, { splitPages: false });
-    const doc = await loader.load();
+  const loader = new PDFLoader(filePath, { splitPages: false });
+  const doc = await loader.load();
 
-    const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 500,
-        chunkOverlap: 100,
-    });
+  const textSplitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 500,
+    chunkOverlap: 100,
+  });
 
-    const texts = await textSplitter.splitText(doc[0].pageContent);
+  const texts = await textSplitter.splitText(doc[0].pageContent);
 
-    const documents = texts.map((chunk) => {
-        return {
-            pageContent: chunk,
-            metadata: doc[0].metadata,
-        };
-    });
+  const documents = texts.map((chunk) => ({
+    pageContent: chunk,
+    metadata: doc[0].metadata,
+  }));
 
-    await vectorStore.addDocuments(documents);
-    // console.log(documents);
+  // This both generates embeddings and upserts into Pinecone
+  await PineconeStore.fromDocuments(documents, embeddings, {
+    pineconeIndex,
+  });
+
+  console.log('✅ Document indexed successfully!');
 }
